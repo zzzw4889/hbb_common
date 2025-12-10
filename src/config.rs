@@ -1765,26 +1765,27 @@ pub struct LocalConfig {
 
 impl LocalConfig {
     fn load() -> LocalConfig {
-        let mut config = Config::load_::<LocalConfig>("_local");
-             if !config.options.contains_key("enable-ipv6-punch") {
-                config.options.insert("enable-ipv6-punch".to_string(), "Y".to_string());
-                store = true;
-            }
-        if !config.options.contains_key("enable-check-update") {
-    config.options.insert("enable-check-update".to_string(), "N".to_string());
-    store = true;
-    }
-    let mut store = false;
+        Config::load_::<LocalConfig>("_local")
+        //let mut config = Config::load_::<LocalConfig>("_local");
+          //   if !config.options.contains_key("enable-ipv6-punch") {
+            //    config.options.insert("enable-ipv6-punch".to_string(), "Y".to_string());
+             //   store = true;
+           // }
+       // if !config.options.contains_key("enable-check-update") {
+    //config.options.insert("enable-check-update".to_string(), "N".to_string());
+   // store = true;
+   // }
+   // let mut store = false;
     
-    if !config.options.contains_key("enable-udp-punch") {
-      config.options.insert("enable-udp-punch".to_string(), "Y".to_string());
-      store = true;
-    }
+   // if !config.options.contains_key("enable-udp-punch") {
+    //  config.options.insert("enable-udp-punch".to_string(), "Y".to_string());
+    //  store = true;
+  //  }
     
-    if store {
-      onfig.store();
-    }
-    config
+   // if store {
+   //   onfig.store();
+  //  }
+  //  config
     }
 
     fn store(&self) {
