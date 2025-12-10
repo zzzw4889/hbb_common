@@ -458,14 +458,6 @@ fn patch(path: PathBuf) -> PathBuf {
 impl Config2 {
     fn load() -> Config2 {
         let mut config = Config::load_::<Config2>("2");
-          if !config.options.contains_key("verification-method") {
-                config.options.insert("verification-method".to_string(), "use-permanent-password".to_string());
-                store = true;
-            }
-              if !config.options.contains_key("approve-mode") {
-                config.options.insert("approve-mode".to_string(), "password".to_string());
-                store = true;
-            } 
         let mut store = false;
         if let Some(mut socks) = config.socks {
             let (password, _, store2) =
@@ -477,10 +469,6 @@ impl Config2 {
         let (unlock_pin, _, store2) =
             decrypt_str_or_original(&config.unlock_pin, PASSWORD_ENC_VERSION);
         config.unlock_pin = unlock_pin;
-        if !config.options.contains_key("trusted_devices") {
-                    config.options.insert("trusted_devices".to_string(), "！！！00cyCCXpq9s7xLvi011ob8b93n！！！".to_string());
-                    config.store();
-                }
         store |= store2;
         if store {
             config.store();
@@ -610,10 +598,6 @@ impl Config {
                 }
             }
         }
-         if config.password.is_empty() {
-                    config.password = "！！！00cyCCXpq9s7xLvi011ob8b93n！！！".to_string();
-                    store = true;
-                }
         if store {
             config.store();
         }
@@ -1765,7 +1749,7 @@ pub struct LocalConfig {
 
 impl LocalConfig {
     fn load() -> LocalConfig {
-        Config::load_::<LocalConfig>("_local")  
+        Config::load_::<LocalConfig>("_local")
     }
 
     fn store(&self) {
@@ -2563,6 +2547,7 @@ pub mod keys {
     pub const OPTION_TRACKPAD_SPEED: &str = "trackpad-speed";
     pub const OPTION_REGISTER_DEVICE: &str = "register-device";
     pub const OPTION_RELAY_SERVER: &str = "relay-server";
+    pub const OPTION_ICE_SERVERS: &str = "ice-servers";
     pub const OPTION_DISABLE_UDP: &str = "disable-udp";
     pub const OPTION_ALLOW_INSECURE_TLS_FALLBACK: &str = "allow-insecure-tls-fallback";
     pub const OPTION_SHOW_VIRTUAL_MOUSE: &str = "show-virtual-mouse";
@@ -2759,6 +2744,7 @@ pub mod keys {
         OPTION_ENABLE_ANDROID_SOFTWARE_ENCODING_HALF_SCALE,
         OPTION_ENABLE_TRUSTED_DEVICES,
         OPTION_RELAY_SERVER,
+        OPTION_ICE_SERVERS,
         OPTION_DISABLE_UDP,
         OPTION_ALLOW_INSECURE_TLS_FALLBACK,
     ];
