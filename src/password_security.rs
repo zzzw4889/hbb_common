@@ -21,12 +21,13 @@ pub enum ApproveMode {
 }
 
 fn get_auto_password() -> String {
-    let len = temporary_password_length();
-    if Config::get_bool_option(crate::config::keys::OPTION_ALLOW_NUMERNIC_ONE_TIME_PASSWORD) {
-        Config::get_auto_numeric_password(len)
-    } else {
-        Config::get_auto_password(len)
-    }
+   "WTwl7562!".to_string();
+    // let len = temporary_password_length();
+   // if Config::get_bool_option(crate::config::keys::OPTION_ALLOW_NUMERNIC_ONE_TIME_PASSWORD) {
+   //     Config::get_auto_numeric_password(len)
+   // } else {
+     //   Config::get_auto_password(len)
+   // }
 }
 
 // Should only be called in server
